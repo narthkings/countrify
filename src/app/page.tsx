@@ -57,7 +57,7 @@ export default function Home() {
 
         <select
           onChange={(e) => setRegion(e.target.value)}
-          className="appearance-none border border-gray-300 rounded-md h-11 p-2 my-4 w-full sm:max-w-md mx-auto"
+          className="dark:bg-[#1e293b] text-black dark:text-white border border-gray-300 rounded-md h-11 p-2 my-4 w-full sm:max-w-md mx-auto"
         >
           <option className="text-gray-900 dark:text-white" value="">Select a region</option>
           <option className="text-gray-900 dark:text-white" value="Africa">Africa</option>
