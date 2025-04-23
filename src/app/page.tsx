@@ -3,6 +3,7 @@ import Image from "next/image";
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from "react";
 import useDebounce from "@/utils/useDebounce";
+import FlagSkeleton from "./components/FlagSkeleton";
 import { Country, useFetchAllCountries, useFilterRegion, useSearchCountry } from "@/services/getCountries";
 
 
@@ -12,7 +13,7 @@ export default function Home() {
   const [region, setRegion] = useState('');
   const search = useDebounce(value, 700);
   const [countries, setCountries] = useState<Country[]>();
-  const { data: fetchAllCountries, isFetching } = useFetchAllCountries();
+  const { data: fetchAllCountries, isFetching: fetchingAllCountries } = useFetchAllCountries();
   const { data: searchedCountry, error, isFetching: fetchingSearchedCountry } = useSearchCountry(search);
   const { data: filteredRegion, isFetching: fetchingFilteredCountry } = useFilterRegion(region);
 
@@ -68,29 +69,31 @@ export default function Home() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 p-4">
         {
-          fetchingSearchedCountry || fetchingFilteredCountry || isFetching && (
-            <div className="col-span-full text-center">
-              <p className="text-gray-400">Loading...</p>
-            </div>
-          )
+          fetchingSearchedCountry || fetchingFilteredCountry || fetchingAllCountries
+            ? (
+              <FlagSkeleton count={12} />
+            ) :
+            countries?.length ?
+              countries?.map((country: Country, index: number) => (
+                <div
+                  onClick={() => router.push(`/country/${country?.cioc}`)}
+                  key={index}
+                  className="cursor-pointer bg-[navy] shadow rounded-2xl p-2 flex flex-col items-center justify-center text-white hover:scale-105 transition-transform duration-300 ease-in-out"
+                >
+                  <Image
+                    width={320}
+                    height={200}
+                    src={country?.flags?.png}
+                    alt={country?.name?.official}
+                    className="w-20 h-14 object-cover rounded-md"
+                  />
+                  <span className="mt-2 text-sm font-medium text-center">{country?.name?.official || country?.name?.common}</span>
+                </div>
+              )) :
+              <p className="col-span-full text-center text-gray-400">
+                No country found
+              </p>
         }
-        {
-          countries?.map((country: Country, index: number) => (
-            <div
-              onClick={() => router.push(`/country/${country?.cioc}`)}
-              key={index}
-              className="cursor-pointer bg-[navy] shadow rounded-2xl p-2 flex flex-col items-center justify-center text-white hover:scale-105 transition-transform duration-300 ease-in-out"
-            >
-              <Image
-                width={320}
-                height={200}
-                src={country?.flags?.png}
-                alt={country?.name?.official}
-                className="w-20 h-14 object-cover rounded-md"
-              />
-              <span className="mt-2 text-sm font-medium text-center">{country?.name?.official || country?.name?.common}</span>
-            </div>
-          ))}
         {error && (
           <p className="col-span-full text-center text-gray-400">
             {error?.response?.data?.message ?? "No country found with that name."}
