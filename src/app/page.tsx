@@ -24,9 +24,6 @@ export default function Home() {
     if (search) {
       setCountries(searchedCountry);
     }
-    // else if (region) {
-    //   setCountries(filteredRegion);
-    // }
     else {
       setCountries(defaultCountries);
     }
