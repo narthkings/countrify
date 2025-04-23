@@ -6,7 +6,6 @@ import useDebounce from "@/utils/useDebounce";
 import FlagSkeleton from "./components/FlagSkeleton";
 import { Country, useFetchAllCountries, useFilterRegion, useSearchCountry } from "@/services/getCountries";
 
-
 export default function Home() {
   const router = useRouter()
   const [value, setValue] = useState('');
@@ -54,16 +53,18 @@ export default function Home() {
           placeholder="Search for a country..."
           className="border border-gray-300 rounded-md p-2 my-4 w-full sm:max-w-md mx-auto"
         />
+        {/* <Select options={options} /> */}
+
         <select
           onChange={(e) => setRegion(e.target.value)}
           className="appearance-none border border-gray-300 rounded-md h-11 p-2 my-4 w-full sm:max-w-md mx-auto"
         >
-          <option value="">Select a region</option>
-          <option value="Africa">Africa</option>
-          <option value="Americas">Americas</option>
-          <option value="Asia">Asia</option>
-          <option value="Europe">Europe</option>
-          <option value="Oceania">Oceania</option>
+          <option className="text-gray-900 dark:text-white" value="">Select a region</option>
+          <option className="text-gray-900 dark:text-white" value="Africa">Africa</option>
+          <option className="text-gray-900 dark:text-white" value="Americas">Americas</option>
+          <option className="text-gray-900 dark:text-white" value="Asia">Asia</option>
+          <option className="text-gray-900 dark:text-white" value="Europe">Europe</option>
+          <option className="text-gray-900 dark:text-white" value="Oceania">Oceania</option>
         </select>
       </div>
 
